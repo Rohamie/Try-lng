@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Faculty Consultation Kiosk</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">BSU</span>
+        <div>
+          <h1>Faculty Consultation</h1>
+          <p>Alangilan · Engineering Technology</p>
+        </div>
+      </div>
+      <button type="button" class="link-btn" id="admin-open-btn">Admin</button>
+    </header>
+
+    <main id="student-view">
+      <div class="controls">
+        <input id="professor-search" type="search" placeholder="Search professor" autocomplete="off" />
+        <ul class="legend">
+          <li><i class="dot present"></i> Present</li>
+          <li><i class="dot busy"></i> Busy</li>
+          <li><i class="dot unavailable"></i> Not present</li>
+        </ul>
+      </div>
+      <p class="search-note" id="search-note"></p>
+      <div class="room" id="faculty-room"></div>
+    </main>
+
+    <section id="admin-view" hidden>
+      <div class="admin-bar">
+        <h2>Admin</h2>
+        <button type="button" class="link-btn dark" id="admin-logout-btn">Log out</button>
+      </div>
+
+      <form id="admin-login-form" class="card login">
+        <label for="admin-pin">PIN</label>
+        <input id="admin-pin" type="password" inputmode="numeric" maxlength="8" />
+        <p class="hint">Prototype PIN: 1234</p>
+        <p class="error" id="admin-login-error" hidden></p>
+        <button type="submit" class="primary">Enter</button>
+      </form>
+
+      <div id="admin-console" hidden>
+        <div class="tabs">
+          <button type="button" class="tab is-on" data-tab="people">People</button>
+          <button type="button" class="tab" data-tab="requests">Requests</button>
+        </div>
+        <div id="tab-people" class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cubicle</th>
+                <th>Name on cubicle</th>
+                <th>Full name</th>
+                <th>Status</th>
+                <th>Request</th>
+              </tr>
+            </thead>
+            <tbody id="people-body"></tbody>
+          </table>
+        </div>
+        <div id="tab-requests" class="table-wrap" hidden>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Professor</th>
+                <th>Student</th>
+                <th>SR-Code</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="request-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <div class="overlay" id="popup" hidden>
+      <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-name">
+        <button type="button" class="close" id="popup-close" aria-label="Close">×</button>
+        <h2 id="popup-name"></h2>
+        <p id="popup-status"></p>
+        <form id="request-form">
+          <label for="student-name">Your name</label>
+          <input id="student-name" required />
+          <label for="student-sr">SR-Code</label>
+          <input id="student-sr" required />
+          <p class="error" id="request-error" hidden></p>
+          <p class="ok" id="request-ok" hidden></p>
+          <button type="submit" class="primary" id="request-send">Send request</button>
+        </form>
+        <p class="hint" id="vacant-note" hidden>This cubicle is vacant.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
