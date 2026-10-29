@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Professor Availability and Consultation Request System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">BSU</span>
+        <div>
+          <h1>Faculty Consultation</h1>
+          <p>Alangilan · Engineering Technology</p>
+        </div>
+      </div>
+      <button type="button" class="link-btn" id="admin-open-btn">Admin</button>
+    </header>
+
+    <main id="student-view">
+      <div class="controls">
+        <label class="room-choose" for="room-select">Faculty room <select id="room-select"><option value="room2">Faculty Room 2</option><option value="room1">Faculty Room 1</option></select></label>
+        <input id="professor-search" type="search" placeholder="Search professor" autocomplete="off" />
+        <ul class="legend">
+          <li><i class="dot present"></i> Available</li>
+          <li><i class="dot busy"></i> Busy</li>
+          <li><i class="dot unavailable"></i> Unavailable</li>
+        </ul>
+      </div>
+      <p class="search-note" id="search-note"></p>
+      <div class="room" id="faculty-room"></div>
+    </main>
+
+    <section id="admin-view" hidden>
+      <div class="admin-bar">
+        <h2>Admin</h2>
+        <button type="button" class="link-btn dark" id="admin-logout-btn">Log out</button>
+      </div>
+
+      <form id="admin-login-form" class="card login">
+        <label for="admin-pin">PIN</label>
+        <input id="admin-pin" type="password" inputmode="numeric" maxlength="8" />
+        <p class="hint">Prototype only: administrator authentication is not yet secured.</p>
+        <p class="error" id="admin-login-error" hidden></p>
+        <button type="submit" class="primary">Enter</button>
+      </form>
+
+      <div id="admin-console" hidden>
+        <div class="tabs">
+          <button type="button" class="tab is-on" data-tab="people">People</button>
+          <button type="button" class="tab" data-tab="requests">Requests</button>
+          <button type="button" class="tab" data-tab="testing">Prototype Testing</button>
+        </div>
+        <div id="tab-people">
+          <div class="manage-toolbar"><label for="admin-room-select">Faculty room <select id="admin-room-select"><option value="room2">Faculty Room 2</option><option value="room1">Faculty Room 1</option></select></label></div>
+          <div class="roster-management">
+            <div class="roster-head">
+              <strong>Manage professors</strong>
+              <div class="roster-switch" role="group" aria-label="Choose professor management action">
+                <button type="button" class="roster-action is-on" data-roster-action="add" aria-pressed="true">Add professor</button>
+                <button type="button" class="roster-action" data-roster-action="remove" aria-pressed="false">Remove professor</button>
+              </div>
+            </div>
+          <form id="add-professor-form" class="manage-toolbar">
+            <select id="new-honorific" aria-label="Title"><option>Dr.</option><option>Sir</option><option>Ma'am</option></select>
+            <input id="new-given" placeholder="Given name" aria-label="Given name" required maxlength="70" />
+            <input id="new-last" placeholder="Last name" aria-label="Last name" required maxlength="70" />
+            <input id="new-short" placeholder="Cubicle display name" aria-label="Name shown on cubicle" required maxlength="70" />
+            <button type="submit" class="small">Add professor</button>
+          </form>
+          <div id="remove-professor-panel" class="manage-toolbar" hidden>
+            <label for="remove-professor-select">Professor</label>
+            <select id="remove-professor-select"></select>
+            <button type="button" id="remove-professor-btn" class="small danger">Remove professor</button>
+          </div>
+          <p class="error" id="roster-error" role="status" hidden></p>
+          </div>
+          <p class="hint">Changes to names and assignments are part of this prototype's roster management. Physical statuses are controlled by professors' buttons in the planned system.</p>
+          <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Cubicle</th>
+                <th>Name on cubicle</th>
+                <th>Full name / Assignment</th>
+              </tr>
+            </thead>
+            <tbody id="people-body"></tbody>
+          </table></div>
+        </div>
+        <div id="tab-requests" class="table-wrap" hidden>
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Professor</th>
+                <th>Faculty Room</th>
+                <th>Student</th>
+                <th>Section / Program</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="request-body"></tbody>
+          </table>
+        </div>
+        <div id="tab-testing" hidden>
+          <p class="test-warning">Prototype testing controls only — not an administrator feature of the proposed deployed system. Hardware buttons will control statuses and acknowledgments.</p>
+          <div class="manage-toolbar"><label for="testing-room-select">Faculty room <select id="testing-room-select"><option value="room2">Faculty Room 2</option><option value="room1">Faculty Room 1</option></select></label></div>
+          <div class="table-wrap"><table><thead><tr><th>Professor</th><th>Test availability status</th><th>Pending request</th></tr></thead><tbody id="testing-body"></tbody></table></div>
+          <button type="button" id="reset-status-btn" class="small">Set all statuses to red (simulate next-day startup)</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="overlay" id="popup" hidden>
+      <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popup-name">
+        <button type="button" class="close" id="popup-close" aria-label="Close">×</button>
+        <h2 id="popup-name"></h2>
+        <p id="popup-status"></p>
+        <form id="request-form">
+          <label for="student-name">Your name</label>
+          <input id="student-name" required />
+          <label for="student-sr">Section / Program</label>
+          <input id="student-sr" required />
+          <p class="error" id="request-error" hidden></p>
+          <p class="ok" id="request-ok" hidden></p>
+          <button type="submit" class="primary" id="request-send">Send request</button>
+        </form>
+        <p class="hint" id="vacant-note" hidden>This cubicle is vacant.</p>
+      </div>
+    </div>
+
+    <!-- Searchable professor assignment picker (prototype administration). -->
+    <div class="overlay" id="assignment-picker" hidden>
+      <div class="popup assignment-popup" role="dialog" aria-modal="true" aria-labelledby="assignment-picker-heading">
+        <button type="button" class="close" id="assignment-picker-close" aria-label="Close professor search">×</button>
+        <h2 id="assignment-picker-heading">Assign professor</h2>
+        <p class="hint" id="assignment-picker-context"></p>
+        <label for="assignment-search">Search professor</label>
+        <input type="search" id="assignment-search" placeholder="Type a professor's name" autocomplete="off" />
+        <div id="assignment-results" class="assignment-results" role="listbox" aria-label="Matching professors"></div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
