@@ -151,14 +151,16 @@ button { cursor: pointer; touch-action: manipulation; }
   --c: #b7aea6;
   border: 0;
   border-radius: 12px;
-  background: var(--card);
-  box-shadow: inset 5px 0 0 var(--c);
+  background: var(--c);
+  box-shadow: none;
   padding: 10px 12px;
   text-align: left;
   font-weight: 700;
   line-height: 1.25;
-  color: var(--ink);
+  color: #ffffff;
 }
+
+.cubicle.busy { color: var(--ink); }
 
 .cubicle.vacant {
   color: var(--muted);
@@ -168,7 +170,7 @@ button { cursor: pointer; touch-action: manipulation; }
 
 .cubicle.is-dim { opacity: 0.35; }
 .cubicle.is-on { outline: 2px solid var(--red); opacity: 1; }
-.cubicle.wait { box-shadow: inset 5px 0 0 var(--c), 0 0 0 2px #e0a800; }
+.cubicle.wait { box-shadow: 0 0 0 2px #e0a800; }
 
 .admin-bar { margin: 16px 0 12px; }
 .card {
